@@ -1,0 +1,1 @@
+export default function DeployButton({onClick}) { return <button onClick={onClick}>Deploy</button>; }

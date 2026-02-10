@@ -1,0 +1,1 @@
+export default function AgentStatusCard({status}) { return <div>Status: {status}</div>; }
