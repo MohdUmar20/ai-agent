@@ -1,0 +1,1 @@
+export default function Navbar() { return <div className="bg-gray-100 p-4">Your Brand Navbar</div>; }

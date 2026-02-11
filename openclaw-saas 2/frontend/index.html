@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw SaaS - Managed OpenClaw Servers</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover:hover { transform: translateY(-4px); transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-purple-600">⚡ OpenClaw SaaS</h1>
+                </div>
+                <div id="nav-buttons">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="app-container">
+        <!-- Landing Page (shown when not logged in) -->
+        <div id="landing-page" class="hidden">
+            <!-- Hero Section -->
+            <div class="gradient-bg text-white py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-5xl font-bold mb-6">Deploy OpenClaw Servers in Seconds</h1>
+                    <p class="text-xl mb-8 text-purple-100">Fully managed, scalable OpenClaw instances on AWS. No DevOps required.</p>
+                    <button onclick="handleSignIn()" class="bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-50 transition">
+                        🚀 Get Started with Google
+                    </button>
+                    <p class="mt-4 text-purple-200">Start your free trial today • No credit card required</p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <h2 class="text-3xl font-bold text-center mb-12">Why Choose OpenClaw SaaS?</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-sm card-hover">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h3 class="text-xl font-semibold mb-3">Instant Deployment</h3>
+                        <p class="text-gray-600">Deploy production-ready OpenClaw servers in under 3 minutes with one click.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm card-hover">
+                        <div class="text-4xl mb-4">🔒</div>
+                        <h3 class="text-xl font-semibold mb-3">Secure & Reliable</h3>
+                        <p class="text-gray-600">Hosted on AWS with automatic backups, SSL certificates, and 99.9% uptime SLA.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm card-hover">
+                        <div class="text-4xl mb-4">💰</div>
+                        <h3 class="text-xl font-semibold mb-3">Transparent Pricing</h3>
+                        <p class="text-gray-600">Simple monthly pricing with no hidden fees. Scale up or down anytime.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="bg-gray-100 py-20" id="pricing-section">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-bold text-center mb-12">Simple, Transparent Pricing</h2>
+                    <div id="pricing-cards" class="grid md:grid-cols-4 gap-6">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="gradient-bg text-white py-16">
+                <div class="max-w-4xl mx-auto text-center px-4">
+                    <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+                    <p class="text-xl mb-8 text-purple-100">Join hundreds of developers using OpenClaw SaaS</p>
+                    <button onclick="handleSignIn()" class="bg-white text-purple-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-purple-50 transition">
+                        Sign In with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard (shown when logged in) -->
+        <div id="dashboard-page" class="hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Stats Cards -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-sm mb-1">Total Servers</div>
+                        <div class="text-3xl font-bold" id="stat-total">0</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-sm mb-1">Running</div>
+                        <div class="text-3xl font-bold text-green-600" id="stat-running">0</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-sm mb-1">Stopped</div>
+                        <div class="text-3xl font-bold text-orange-600" id="stat-stopped">0</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-sm mb-1">Provisioning</div>
+                        <div class="text-3xl font-bold text-blue-600" id="stat-provisioning">0</div>
+                    </div>
+                </div>
+
+                <!-- Create Server Button -->
+                <div class="mb-6 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">My Servers</h2>
+                    <button onclick="showCreateServerModal()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                        + Create New Server
+                    </button>
+                </div>
+
+                <!-- Servers List -->
+                <div id="servers-list" class="space-y-4">
+                    <!-- Will be populated by JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden bg-white rounded-lg shadow-sm p-12 text-center">
+                    <div class="text-6xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold mb-2">No servers yet</h3>
+                    <p class="text-gray-600 mb-6">Create your first OpenClaw server to get started</p>
+                    <button onclick="showCreateServerModal()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                        Create Your First Server
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Server Modal -->
+    <div id="create-server-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6">Create New Server</h2>
+            <div id="modal-pricing-cards" class="grid md:grid-cols-2 gap-4 mb-6">
+                <!-- Will be populated by JS -->
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button onclick="hideCreateServerModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto"></div>
+            <p class="mt-4 text-center font-semibold">Loading...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
